@@ -1,0 +1,19 @@
+language: python
+
+python:
+  - "2.7"
+
+before_script:
+  - mkdir -p shippable/buildoutput
+
+install:
+  - rm -rf /tmp/kubernetes
+  - git clone https://github.com/GoogleCloudPlatform/kubernetes.git /tmp/kubernetes 
+  - apt-get update
+  - apt-get install -y curl
+
+script:
+  - cd /tmp/kubernetes; make WHAT=cluster/addons/dns/kube2sky
+
+after_script:
+  - cp /tmp/kubernetes/_output/local/go/bin/kube2sky ./shippable/buildoutput/.
