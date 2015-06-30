@@ -13,7 +13,7 @@ install:
   - apt-get install -y curl
 
 script:
-  - cd /tmp/kubernetes; make WHAT=cluster/addons/dns/kube2sky
+  - make KUBEROOT=/tmp/kubernetes V=v0.20.1 IMAGEACCOUNT=tacodata all.tmp
 
 after_script:
-  - cp /tmp/kubernetes/_output/local/go/bin/kube2sky ./shippable/buildoutput/.
+  - cp ./kube2sky ./shippable/buildoutput/.

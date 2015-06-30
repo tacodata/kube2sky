@@ -20,7 +20,7 @@ V=v0.20.1
 # if your git checkout of kubernetes is not in ../../kubernetes,
 # then set the variable KUBEROOT
 KUBEROOT ?= ../../kubernetes
-K=${KUBEROOT}/cluster
+K=cluster/addons/dns/kube2sky
 
 H=kube2sky
 IMAGENAME = ${IMAGEACCOUNT}/$H
@@ -29,37 +29,16 @@ directions :
 	@echo 'to make an image for your docker hub account'
 	@echo 'make IMAGEACCOUNT=yourdockerhubaccount docker'
 
-all.tmp: $H.tmp safe_format_and_mount.tmp master-multi.json.tmp master.json.tmp
-	@echo 'made everything.  you can do a git commit, or make docker'
+all.tmp: $(KUBEROOT)/_output/local/bin/linux/amd64/$H
+	cp $(KUBEROOT)/_output/local/bin/linux/amd64/$H .
+	cp $(KUBEROOT)/$K/$H.go .
 	touch all.tmp
 
-dockerbuild: safe_format_and_mount.tmp master-multi.json.tmp master.json.tmp $H.tmp
-	docker build -t ${IMAGENAME}:$V .
-
-dockerpush: safe_format_and_mount.tmp master-multi.json.tmp master.json.tmp $H.tmp
-	docker push ${IMAGENAME}:$V
-
-docker: safe_format_and_mount.tmp master-multi.json.tmp master.json.tmp $H.tmp
-	docker build -t ${IMAGENAME}:$V .
-	docker push ${IMAGENAME}:$V
-
-master-multi.json.tmp : $K/images/kube2sky/master-multi.json
-	sed "s/VERSON/$V/g" $< > $@
-
-master.json.tmp : $K/images/kube2sky/master.json
-	sed "s/VERSON/$V/g" $< > $@
-
-$H.tmp:$H.$V.src
-	rm -f $@
-	cp $< $@
-
-$H.$V.src:
-	curl -s -o $@ https://storage.googleapis.com/kubernetes-release/release/$V/bin/linux/amd64/$H
-
-safe_format_and_mount.tmp : $K/saltbase/salt/helpers/safe_format_and_mount
-	cp $K/saltbase/salt/helpers/safe_format_and_mount $@
+$(KUBEROOT)/_output/local/bin/linux/amd64/$H: $(KUBEROOT)/$K/$H.go
+	@echo 'make the kube2sky'
+	(cd $(KUBEROOT); make WHAT=$K)
 
 clean :
-	rm -f *.tmp *.src
+	rm -f *.tmp $H $H.go
 
 .PHONY: all
