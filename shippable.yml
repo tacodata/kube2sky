@@ -9,10 +9,10 @@ before_script:
 install:
   - rm -rf /tmp/kubernetes
   - git clone https://github.com/GoogleCloudPlatform/kubernetes.git /tmp/kubernetes 
-  - apt-get update
-  - apt-get install -y curl
 
 script:
+  - export GOPATH=$PWD
+  - export PATH=$PATH:$GOPATH/bin
   - make KUBEROOT=/tmp/kubernetes all.tmp
 
 after_script:
