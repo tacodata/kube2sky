@@ -15,6 +15,7 @@ before_install:
 install:
   - rm -rf /tmp/kubernetes
   - git clone https://github.com/GoogleCloudPlatform/kubernetes.git /tmp/kubernetes 
+  - (cd /tmp/kubernetes; git checkout v0.20.2)
 
 script:
   - make KUBEROOT=/tmp/kubernetes all.tmp
