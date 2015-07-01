@@ -6,13 +6,17 @@ go:
 before_script:
   - mkdir -p shippable/buildoutput
 
+before_install:
+  - source $HOME/.gvm/scripts/gvm;
+  - gvm install release; gvm use release
+  - export GOPATH=$SHIPPABLE_GOPATH
+  - export PATH=$PATH:$GOPATH/bin
+
 install:
   - rm -rf /tmp/kubernetes
   - git clone https://github.com/GoogleCloudPlatform/kubernetes.git /tmp/kubernetes 
 
 script:
-  - export GOPATH=$PWD
-  - export PATH=$PATH:$GOPATH/bin
   - make KUBEROOT=/tmp/kubernetes all.tmp
 
 after_script:
