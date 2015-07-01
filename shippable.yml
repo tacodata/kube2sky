@@ -21,3 +21,4 @@ script:
 
 after_script:
   - cp ./kube2sky ./shippable/buildoutput/.
+  - cp ./kube2sky.go ./shippable/buildoutput/.
