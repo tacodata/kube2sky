@@ -8,6 +8,8 @@ K=cluster/addons/dns/kube2sky
 
 H=kube2sky
 
+V ?= unknown
+
 directions :
 	@echo 'to make an image for your docker hub account'
 	@echo 'make IMAGEACCOUNT=yourdockerhubaccount docker'

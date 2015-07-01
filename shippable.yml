@@ -18,7 +18,7 @@ install:
   - (cd /tmp/kubernetes; git checkout v0.20.2)
 
 script:
-  - make KUBEROOT=/tmp/kubernetes all.tmp
+  - make KUBEROOT=/tmp/kubernetes V=v0.20.2 all.tmp
 
 after_script:
   - cp ./kube2sky ./shippable/buildoutput/.
